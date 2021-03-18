@@ -93,9 +93,25 @@ echo " " >> $archsaveinfo
 echo " " >> $archsaveinfo
 echo " " >> $archsaveinfo
 #
-echo "Active services::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+echo "Active services (Validation 1)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
 #
 for services in $(sudo systemctl list-unit-files --type service --all | grep enabled | sed "s/.service//g" | cut -d " " -f 1) ; do echo " ||||||||||||||| $services ||||||||||||||| $(service $services status | grep 'Active' | awk {'print $1,$2'} | cut -d ":" -f 2)" ; done 2>/dev/null >> $archsaveinfo
+#
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+#
+echo "Active services (Validation 2)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+#
+for servicesanalisys in $(service --status-all | awk '{if ($2 == echo "+" ) print  $4}') ; do echo "||||||||||||||| $servicesanalisys ||||||||||||||| $(service $servicesanalisys status | grep 'Active:' | awk {'print $2'} | grep -w 'active')" ; done 2>/dev/null >> $archsaveinfo
+#
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+#
+echo "Inactive services (Validation 2)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+#
+for servicesanalisys in $(service --status-all | awk '{if ($2 == echo "-" ) print  $4}') ; do echo "||||||||||||||| $servicesanalisys ||||||||||||||| $(service $servicesanalisys status | grep 'Active:' | awk {'print $2'} | grep -w 'inactive')" ; done 2>/dev/null >> $archsaveinfo
 #
 echo " " >> $archsaveinfo
 echo " " >> $archsaveinfo
@@ -113,6 +129,14 @@ echo " " >> $archsaveinfo
 echo "CPU offenders::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
 #
 ps aux | awk '{if ($3 > 1.0) print  $2 " "  $11 " " "CPU% " $3}' | sort -k 3 -r -n >> $archsaveinfo
+#
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+#
+echo "Memory offenders::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+#
+ps axo %mem,pid,euser,cmd | sort -nr | head -n 10  >> $archsaveinfo
 #
 echo " " >> $archsaveinfo
 echo " " >> $archsaveinfo
