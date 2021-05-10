@@ -41,6 +41,8 @@ echo "The $(uptime | awk {'print $8,$9'} | cut -d ":" -f 1 ) in this server: $(u
 #
 echo -e 'Online users:\033[01;34m '$(users)'\033[00;38m'
 #
+echo "The last reboot in ::::: $(last reboot)"
+#
 echo "10"
 sleep 1
 echo "09"
@@ -155,6 +157,35 @@ echo "Storage:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #
 df -h >> $archsaveinfo
 #
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+#
+echo "Kernel Version::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+cat /proc/version >> $archsaveinfo
+#
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+#
+echo "Network::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+route -n >> $archsaveinfo
+echo " " >> $archsaveinfo
+ip link show >> $archsaveinfo
+echo " " >> $archsaveinfo
+ethtool eth0 >> $archsaveinfo
+echo " " >> $archsaveinfo
+netstat -tup >> $archsaveinfo
+#
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+echo " " >> $archsaveinfo
+#
+echo "IPtables::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" >> $archsaveinfo
+iptables -t filter -L >> $archsaveinfo
+echo " " >> $archsaveinfo
+iptables -t nat -L >> $archsaveinfo
+echo " " >> $archsaveinfo
 echo " " >> $archsaveinfo
 #
 echo -e 'Analysis completed successfully, in the \033[01;34m '$archsaveinfo'\033[00;38m file are all relevant information'
